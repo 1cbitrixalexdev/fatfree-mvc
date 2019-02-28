@@ -71,11 +71,12 @@ class UserController extends Controller
 				}
 			} catch (Exception $e)
 			{
-				echo 'Выброшено исключение: ', $e->getMessage(), "\n";
+				echo 'Throw exception: ', $e->getMessage(), "\n";
 				break;
 			}
 		}
-		$this->f3->reroute('/login');
+		//file_put_contents('messages.txt', print_r($this->f3['MESSAGES'], true));
+		$this->login();
 	}
 
 	function userPage()
