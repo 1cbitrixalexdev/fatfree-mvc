@@ -1,20 +1,6 @@
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <title>F3 Sample Project Login Page</title>
-    <link rel="stylesheet"
-          href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
-          crossorigin="anonymous">
-</head>
-
-<body>
-
-<div class="container">
+{% extends "template.twig" %}
+{% block title %}{{ settings.site_name }} &mdash; Sign in{% endblock %}
+{% block body %}
     <div class="row">
         <div class="col-md-6 offset-md-3">
             {% if "MESSAGES"|f3 %}
@@ -61,9 +47,6 @@
             </form>
         </div>
     </div>
-</div>
-
-</body>
-</html>
+{% endblock %}
 
 

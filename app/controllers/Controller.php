@@ -71,7 +71,7 @@ class Controller
 			$twig->addGlobal('STATIC_URL', $f3->get('STATIC_URL'));
 			$twig->addGlobal('MEDIA_URL', $f3->get('MEDIA_URL'));
 			$twig->addGlobal('UI', "/" . $f3->get('UI'));
-			$twig->addGlobal('site', $f3->get('site'));
+			$twig->addGlobal('settings', $f3->get('settings'));
 		}
 		return $twig;
 	}

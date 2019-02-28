@@ -99,8 +99,9 @@ class UserController extends Controller
 			$this->login();
 		} else
 		{
-			$template = new Template;
-			echo $template->render('user/index.twig');
+			//$template = new Template;
+			//echo $template->render('user/index.twig');
+			echo Controller::twig()->render('user/index.twig');
 		}
 	}
 
@@ -113,8 +114,9 @@ class UserController extends Controller
 			$this->login();
 		} else
 		{
-			$template = new Template;
-			echo $template->render('admin/index.twig');
+			//$template = new Template;
+			//echo $template->render('admin/index.twig');
+			echo Controller::twig()->render('admin/index.twig');
 		}
 	}
 }
