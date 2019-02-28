@@ -10,7 +10,13 @@ class UserController extends Controller
 {
 	function login()
 	{
-		echo Controller::twig()->render('login.twig');
+		if ($this->f3->get('SESSION.user'))
+		{
+			$this->f3->reroute('/');
+		} else
+		{
+			echo Controller::twig()->render('login.twig');
+		}
 	}
 
 	public function logout()
@@ -21,12 +27,16 @@ class UserController extends Controller
 
 	function beforeroute()
 	{
-		//echo "Before route";
+		/*if (!self::is_auth())
+		{
+			$this->f3->reroute('login');
+			exit;
+		}*/
 	}
 
 	function authenticate()
 	{
-		while ( true )
+		while (true)
 		{
 			try
 			{
@@ -37,7 +47,7 @@ class UserController extends Controller
 
 				if ($user->dry())
 				{
-					self::error_msg( 'User not found' );
+					self::error_msg('User not found');
 					break;
 				}
 
@@ -62,11 +72,12 @@ class UserController extends Controller
 					}
 
 					$this->f3->set('SESSION.user', $user->username);
+					$this->f3->set('SESSION.role', $user->role);
 					$this->f3->reroute($reRoute);
 					break;
 				} else
 				{
-					self::error_msg( 'Invalid password' );
+					self::error_msg('Invalid password');
 					break;
 				}
 			} catch (Exception $e)
@@ -81,13 +92,29 @@ class UserController extends Controller
 
 	function userPage()
 	{
-		$template = new Template;
-		echo $template->render('user/index.twig');
+
+		if (!($this->f3->get('SESSION.user')) && !(in_array($this->f3->get("SESSION.role"), array(1, 2))))
+		{
+			self::error_msg('Please, sign in to get access to this page');
+			$this->login();
+		} else
+		{
+			$template = new Template;
+			echo $template->render('user/index.twig');
+		}
 	}
 
 	function adminPage()
 	{
-		$template = new Template;
-		echo $template->render('admin/index.twig');
+
+		if (!($this->f3->get('SESSION.user')) && $this->f3->get("SESSION.role") != 1)
+		{
+			self::error_msg('Please, sign in to get access to this page');
+			$this->login();
+		} else
+		{
+			$template = new Template;
+			echo $template->render('admin/index.twig');
+		}
 	}
 }

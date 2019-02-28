@@ -96,6 +96,7 @@ class Controller
 		if (!$code) $code = count($f3['MESSAGES'][$t]);
 
 		$f3['MESSAGES'][$t][$code] = array('code' => $code, 'type' => $type, 'message' => $message, 'one_time' => $one_time);
+		$f3->set('SESSION.messages', $f3['MESSAGES']);
 	}
 
 	/**
@@ -140,5 +141,24 @@ class Controller
 	static function success_msg($message, $code = null, $one_time = False)
 	{
 		self::msg($message, 'success', $code, $one_time);
+	}
+
+	static function is_session_started()
+	{
+		if (php_sapi_name() !== 'cli')
+		{
+			if (sizeof(self::f3()->get('SESSION')) > 0)
+			{
+				return true;
+			}
+			if (version_compare(phpversion(), '5.4.0', '>='))
+			{
+				return session_status() === PHP_SESSION_ACTIVE ? true : false;
+			} else
+			{
+				return session_id() === '' ? false : true;
+			}
+		}
+		return false;
 	}
 }
