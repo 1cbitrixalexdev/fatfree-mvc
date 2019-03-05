@@ -4,10 +4,24 @@
     <h1>Index page</h1>
     {% if list %}
         <table class="table">
+            <thead>
+            <tr>
+                <th>Client</th>
+                <th>Title</th>
+                {% if is_logged %}
+                    <th>Description</th>
+                    {% if role >= 1 %}
+                        <th>Start</th>
+                    {% endif %}
+                    {% if role == 1 %}
+                        <th>Price</th>
+                    {% endif %}
+                {% endif %}
+            </tr>
+            </thead>
             {% for item in list %}
                 <tr>
-                    <td>{{ item.id }}</td>
-                    <td>{{ item.client }}</td>
+                    <td data-client-id="{{ item.client }}">{{ item.client_name }}</td>
                     <td>{{ item.title }}</td>
                     {% if is_logged %}
                         <td>{{ item.description }}</td>
