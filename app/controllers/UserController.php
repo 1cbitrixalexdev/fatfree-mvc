@@ -73,6 +73,7 @@ class UserController extends Controller
 
 					$this->f3->set('SESSION.user', $user->username);
 					$this->f3->set('SESSION.role', $user->role);
+					$this->f3->set( 'SESSION.is_logged', true );
 					$this->f3->reroute($reRoute);
 					break;
 				} else

@@ -10,9 +10,10 @@
           href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
           crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ UI }}css/main.css" media="all">
 </head>
-<body>
-<div class="container">
+<body{% block body_attr %} id="{{ "PATH"|f3|trim('/') }}Page"{% endblock %}>
+<div class="container h-100">
     {% block body %}{% endblock %}
 </div>
 </body>

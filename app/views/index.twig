@@ -1,5 +1,25 @@
 {% extends "template.twig" %}
 {% block title %}{{ settings.site_name }} &mdash; Home{% endblock %}
 {% block body %}
-	<h1>Index page</h1>
+    <h1>Index page</h1>
+    {% if list %}
+        <table class="table">
+            {% for item in list %}
+                <tr>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.client }}</td>
+                    <td>{{ item.title }}</td>
+                    {% if is_logged %}
+                        <td>{{ item.description }}</td>
+                        {% if role >= 1 %}
+                            <td>{{ item.start }}</td>
+                        {% endif %}
+                        {% if role == 1 %}
+                            <td>{{ item.price }}</td>
+                        {% endif %}
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
 {% endblock %}

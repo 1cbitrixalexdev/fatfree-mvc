@@ -72,6 +72,7 @@ class Controller
 			$twig->addGlobal('MEDIA_URL', $f3->get('MEDIA_URL'));
 			$twig->addGlobal('UI', "/" . $f3->get('UI'));
 			$twig->addGlobal('settings', $f3->get('settings'));
+			$twig->addGlobal( 'is_logged', $f3->get( 'SESSION.is_logged' ) );
 		}
 		return $twig;
 	}
