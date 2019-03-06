@@ -6,3 +6,23 @@
 #loginPage .card {
     background: rgba(255, 255, 255, 0.7);
 }
+
+td.editable {
+    cursor: pointer;
+}
+
+td.editable.success {
+    animation: greenPulse 2s;
+}
+
+@keyframes greenPulse {
+    0% {
+        background-color: transparent;
+    }
+    50% {
+        background-color: #30f351;
+    }
+    100% {
+        background-color: transparent;
+    }
+}

@@ -1,0 +1,20 @@
+{% if "MESSAGES"|f3 %}
+    <div id="messages">
+        {% for type, msg_arr in "MESSAGES"|f3 %}
+            {% for msg in msg_arr %}
+                <div class="alert alert-{% if type|lower == 'error' %}danger{% else %}{{ type|lower }}{% endif %} alert-dismissible{% if msg.one_time %} alert-one-time{% endif %} d-flex align-items-center"
+                     role="alert">
+                    <div>
+                        {% if msg.one_time %}
+                            <button type="button" class="close"
+                                    data-dismiss="alert" data-code="msg-shown-{{ msg.code }}"
+                                    aria-label="Close">
+                                <span aria-hidden="true">&times;</span></button>
+                        {% endif %}
+                        {{ msg.message }}
+                    </div>
+                </div>
+            {% endfor %}
+        {% endfor %}
+    </div>
+{% endif %}

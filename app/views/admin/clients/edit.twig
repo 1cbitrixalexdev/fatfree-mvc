@@ -1,0 +1,34 @@
+{% extends "template.twig" %}
+{% block title %}{{ settings.site_name }} &mdash; Edit client{% endblock %}
+{% block body %}
+    <h1>Editing a client</h1>
+    {% include "messages.twig" %}
+    {% if clients %}
+        <table id="clientsTable" class="table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Company</th>
+                <th>Phone number</th>
+            </tr>
+            </thead>
+            {% for client in clients %}
+                <tr data-id="{{ client.id }}">
+                    <td>{{ client.id }}</td>
+                    <td class="editable"
+                        data-target="name">{{ client.name }}</td>
+                    <td class="editable"
+                        data-target="company">{{ client.company }}</td>
+                    <td class="editable"
+                        data-target="phone">+{{ client.phone }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+    <a href="/logout" class="btn btn-secondary">Log out</a>
+{% endblock %}
+{% block js %}
+    {{ parent() }}
+    <script src="{{ UI }}js/editClient.js"></script>
+{% endblock %}
