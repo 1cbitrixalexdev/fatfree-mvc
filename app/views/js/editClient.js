@@ -37,13 +37,13 @@ if (clientsTable.length) {
 
                 editRequest.done(function () {
                     field.addClass('success');
-                    console.log(data, 'updated!');
+                    $formNode.text(changedValue);
                 });
                 editRequest.fail(function (jqXHR, textStatus) {
+                    field.addClass('fail');
                     alert("Request failed: " + textStatus);
                 });
 
-                $formNode.replaceWith(changedValue);
             })
         });
     })

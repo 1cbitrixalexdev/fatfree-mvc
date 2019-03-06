@@ -15,12 +15,28 @@ td.editable.success {
     animation: greenPulse 2s;
 }
 
+td.editable.fail {
+    animation: redPulse 2s;
+}
+
 @keyframes greenPulse {
     0% {
         background-color: transparent;
     }
     50% {
         background-color: #30f351;
+    }
+    100% {
+        background-color: transparent;
+    }
+}
+
+@keyframes redPulse {
+    0% {
+        background-color: transparent;
+    }
+    50% {
+        background-color: #f3281e;
     }
     100% {
         background-color: transparent;
