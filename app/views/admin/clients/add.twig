@@ -1,0 +1,63 @@
+{% extends "template.twig" %}
+{% block title %}{{ settings.site_name }} &mdash; Dashboard{% endblock %}
+{% block body %}
+    <h1>Adding a client</h1>
+    {% if "MESSAGES"|f3 %}
+        <div id="messages">
+            {% for type, msg_arr in "MESSAGES"|f3 %}
+                {% for msg in msg_arr %}
+                    <div class="alert alert-{% if type|lower == 'error' %}danger{% else %}{{ type|lower }}{% endif %} alert-dismissible{% if msg.one_time %} alert-one-time{% endif %} d-flex align-items-center"
+                         role="alert">
+                        <div>
+                            {% if msg.one_time %}
+                                <button type="button" class="close"
+                                        data-dismiss="alert" data-code="msg-shown-{{ msg.code }}"
+                                        aria-label="Close">
+                                    <span aria-hidden="true">&times;</span></button>
+                            {% endif %}
+                            {{ msg.message }}
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+    {% endif %}
+    <form action="/admin/clients/add" method="post" class="row">
+        <div class="form-group col-md-4">
+            <label for="clientName">Client's name<span class="required">*</span></label>
+            <input id="clientName"
+                   name="name"
+                   type="text"
+                   class="form-control"
+                   maxlength="128"
+                   required="required"
+                   placeholder="Johny Walker Jr."/>
+        </div>
+        <div class="form-group col-md-4">
+            <label for="clientCompany">Company</label>
+            <input id="clientCompany"
+                   name="company"
+                   type="text"
+                   class="form-control"
+                   maxlength="256"
+                   placeholder="Dad's Company ltd."/>
+        </div>
+        <div class="form-group col-md-4">
+            <label for="clientPhone">Phone<span class="required">*</span></label>
+            <input id="clientPhone"
+                   name="phone"
+                   type="text"
+                   class="form-control"
+                   maxlength="32"
+                   placeholder="+1230123456789"/>
+        </div>
+        <div class="form-group col-md-4">
+            <button id="addClient"
+                    name="add"
+                    class="btn btn-success"
+                    type="submit">Add this client to base
+            </button>
+        </div>
+    </form>
+    <a href="/logout" class="btn btn-secondary">Log out</a>
+{% endblock %}

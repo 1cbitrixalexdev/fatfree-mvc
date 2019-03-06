@@ -2,3 +2,7 @@
     background-image: url('../images/wood.jpg');
     background-size: cover;
 }
+
+#loginPage .card {
+    background: rgba(255, 255, 255, 0.7);
+}
