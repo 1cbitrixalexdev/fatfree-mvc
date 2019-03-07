@@ -15,11 +15,6 @@ class Controller
 		}
 	}
 
-	function afterroute()
-	{
-		//echo '- After routing';
-	}
-
 	function __construct()
 	{
 

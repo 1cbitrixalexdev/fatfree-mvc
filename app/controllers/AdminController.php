@@ -8,16 +8,40 @@
 
 class AdminController extends Controller {
 	function addClient( $f3 ) {
+		// clear previous error messages
+		$f3->clear( 'SESSION.messages' );
 		$client = $f3->get( 'POST' );
 		if ( $client ) {
-			try {
-				$_POST     = $f3->clean( $_POST );
-				$newClient = new Clients( $this->db );
-				$newClient->add();
-				self::success_msg( 'Client added successfully!' );
-			} catch ( Exception $e ) {
-				echo 'Throw exception: ', $e->getMessage(), "\n";
-				self::error_msg( 'There were some troubles adding client' );
+			while ( true ) {
+				$_POST = $f3->clean( $_POST );
+				// check if this client is already exists
+				$searchClient = $this->db->exec(
+
+					'SELECT id FROM clients ' .
+					'WHERE name = :name ' .
+					'AND company = :company ' .
+					'AND phone = :phone'
+					,
+					array(
+						':name'    => $_POST["name"],
+						':company' => $_POST["company"],
+						':phone'   => $_POST["phone"]
+					)
+				);
+				if ( count( $searchClient ) ) {
+					self::error_msg( 'This client already exists!', 'duplicate' );
+					break;
+				}
+				try {
+					$newClient = new Clients( $this->db );
+					$newClient->add();
+					self::success_msg( 'Client added successfully!' );
+					break;
+				} catch ( Exception $e ) {
+					echo 'Throw exception: ', $e->getMessage(), "\n";
+					self::error_msg( 'There were some troubles adding client' );
+					break;
+				}
 			}
 		}
 		echo Controller::twig()->render( 'admin/clients/add.twig' );
@@ -37,15 +61,26 @@ class AdminController extends Controller {
 				self::error_msg( 'There were some troubles editing client' );
 			}
 		}
+		/*$list        = new Clients( $this->db );
+		$clients     = $list->all();
+		$clientsList = array();
+		foreach ( $clients as $client ) {
+			$clientsList[] = $client->cast();
+		}*/
+		$context = array(
+			'clients' => $this->getClients()
+		);
+		echo Controller::twig()->render( 'admin/clients/edit.twig', $context );
+	}
+
+	public function getClients() {
 		$list        = new Clients( $this->db );
 		$clients     = $list->all();
 		$clientsList = array();
 		foreach ( $clients as $client ) {
 			$clientsList[] = $client->cast();
 		}
-		$context = array(
-			'clients' => $clientsList
-		);
-		echo Controller::twig()->render( 'admin/clients/edit.twig', $context );
+
+		return $clientsList;
 	}
 }
