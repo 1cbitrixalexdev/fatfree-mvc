@@ -6,7 +6,7 @@
  * Time: 13:12
  */
 
-class Clients extends DB\SQL\Mapper {
+class Clients extends General {
 
 	public function __construct( DB\SQL $db ) {
 		parent::__construct( $db, 'clients' );
@@ -18,29 +18,8 @@ class Clients extends DB\SQL\Mapper {
 		return $this->query;
 	}
 
-	public function getById( $id ) {
-		$this->load( array( 'id=?', $id ) );
-
-		return $this->query;
-	}
-
 	public function getByClient( $name ) {
 		$this->load( array( 'client=?', $name ) );
 	}
 
-	public function add() {
-		$this->copyFrom( 'POST' );
-		$this->save();
-	}
-
-	public function edit( $id ) {
-		$this->load( array( 'id=?', $id ) );
-		$this->copyFrom( 'POST' );
-		$this->update();
-	}
-
-	public function delete( $id ) {
-		$this->load( array( 'id=?', $id ) );
-		$this->erase();
-	}
 }

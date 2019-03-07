@@ -21,6 +21,7 @@ class AdminController extends Controller {
 			}
 		}
 		echo Controller::twig()->render( 'admin/clients/add.twig' );
+		// TODO check if client already exist
 	}
 
 	function editClient( $f3 ) {

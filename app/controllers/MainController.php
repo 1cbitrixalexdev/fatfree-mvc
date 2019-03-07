@@ -9,6 +9,8 @@
 
 class MainController extends Controller {
 	function render() {
+		// clear previous error messages
+		$this->f3->clear( 'SESSION.messages' );
 		// prepare orders ORM
 		$list        = new Orders( $this->db );
 		$orders      = $list->all( null, array( 'limit' => '20', 'offset' => '0' ) );

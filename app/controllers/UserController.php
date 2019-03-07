@@ -29,6 +29,7 @@ class UserController extends Controller {
 	}
 
 	function authenticate() {
+		$this->f3->clear( 'SESSION.messages' );
 		while ( true ) {
 			try {
 				$username = $this->f3->get( 'POST.username' );
@@ -71,11 +72,11 @@ class UserController extends Controller {
 			}
 		}
 		//file_put_contents('messages.txt', print_r($this->f3['MESSAGES'], true));
-		$this->login();
+		$this->f3->reroute( '/login' );
 	}
 
 	function userPage() {
-
+		$this->f3->clear( 'SESSION.messages' );
 		if ( ! ( $this->f3->get( 'SESSION.user' ) ) && ! ( in_array( $this->f3->get( "SESSION.role" ), array(
 				1,
 				2
@@ -90,7 +91,7 @@ class UserController extends Controller {
 	}
 
 	function adminPage() {
-
+		$this->f3->clear( 'SESSION.messages' );
 		if ( ! ( $this->f3->get( 'SESSION.user' ) ) && $this->f3->get( "SESSION.role" ) != 1 ) {
 			self::error_msg( 'Please, sign in to get access to this page' );
 			$this->login();
