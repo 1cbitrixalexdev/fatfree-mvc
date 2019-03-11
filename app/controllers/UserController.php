@@ -82,7 +82,7 @@ class UserController extends Controller {
 				2
 			) ) ) ) {
 			self::error_msg( 'Please, sign in to get access to this page' );
-			$this->login();
+			$this->f3->reroute( '/login' );
 		} else {
 			//$template = new Template;
 			//echo $template->render('user/index.twig');
@@ -94,7 +94,7 @@ class UserController extends Controller {
 		$this->f3->clear( 'SESSION.messages' );
 		if ( ! ( $this->f3->get( 'SESSION.user' ) ) && $this->f3->get( "SESSION.role" ) != 1 ) {
 			self::error_msg( 'Please, sign in to get access to this page' );
-			$this->login();
+			$this->f3->reroute( '/login' );
 		} else {
 
 			echo Controller::twig()->render( 'admin/index.twig' );

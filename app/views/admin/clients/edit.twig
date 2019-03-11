@@ -16,11 +16,12 @@
             {% for client in clients %}
                 <tr data-id="{{ client.id }}">
                     <td>{{ client.id }}</td>
-                    <td class="editable"
+                    <td class="editMe"
                         data-target="name">{{ client.name }}</td>
-                    <td class="editable"
-                        data-target="company">{{ client.company }}</td>
-                    <td class="editable"
+                    <td class="editMe"
+                        data-target="company"
+                        class="editMe">{{ client.company }}</td>
+                    <td class="editMe"
                         data-target="phone">+{{ client.phone }}</td>
                 </tr>
             {% endfor %}
@@ -30,5 +31,39 @@
 {% endblock %}
 {% block js %}
     {{ parent() }}
-    <script src="{{ UI }}js/editClient.js"></script>
+    {#<script src="{{ UI }}js/editClient.js"></script>#}
+    <script src="{{ UI }}js/SimpleTableCellEditor.js"></script>
+    <script>
+        const magicTable = new SimpleTableCellEditor("clientsTable");
+        magicTable.SetEditableClass("editMe", {
+            // key codes
+            keys: {
+                validation: [13],
+                cancellation: [27]
+            }
+        });
+
+        $('#clientsTable').on("cell:edited", function (element, oldValue, newValue) {
+            const $element = $(element.element),
+                nValue = element.newValue;
+
+            const elementField = $element.data('target');
+
+            let data = {},
+                editRequest = $.ajax({
+                    url: "/admin/clients/edit/" + $element.closest('tr').data('id'),
+                    method: "POST",
+                    data: elementField + '=' + nValue
+                });
+
+            editRequest.done(function () {
+                $element.addClass('success');
+            });
+
+            editRequest.fail(function (jqXHR, textStatus) {
+                $element.addClass('fail');
+                alert("Request failed: " + textStatus);
+            });
+        });
+    </script>
 {% endblock %}

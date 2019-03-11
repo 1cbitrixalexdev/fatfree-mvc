@@ -7,15 +7,18 @@
     background: rgba(255, 255, 255, 0.7);
 }
 
-td.editable {
+td.editable,
+td.editMe {
     cursor: pointer;
 }
 
-td.editable.success {
+td.editable.success,
+td.editMe.success {
     animation: greenPulse 2s;
 }
 
-td.editable.fail {
+td.editable.fail,
+td.editMe.fail {
     animation: redPulse 2s;
 }
 
