@@ -27,8 +27,9 @@ class MainController extends Controller {
 		}
 		// prepare variables
 		$context = array(
-			'list' => $ordersArray,
-			'role' => $this->f3->get( "SESSION.role" )
+			'list'     => $ordersArray,
+			'username' => $this->f3->get( 'SESSION.user' ),
+			'role'     => $this->f3->get( "SESSION.role" )
 		);
 		// render
 		echo Controller::twig()->render( 'index.twig', $context );

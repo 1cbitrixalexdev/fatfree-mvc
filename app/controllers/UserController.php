@@ -84,9 +84,10 @@ class UserController extends Controller {
 			self::error_msg( 'Please, sign in to get access to this page' );
 			$this->f3->reroute( '/login' );
 		} else {
-			//$template = new Template;
-			//echo $template->render('user/index.twig');
-			echo Controller::twig()->render( 'user/index.twig' );
+			$context = array(
+				'username' => $this->f3->get( 'SESSION.user' )
+			);
+			echo Controller::twig()->render( 'user/index.twig', $context );
 		}
 	}
 
@@ -96,8 +97,10 @@ class UserController extends Controller {
 			self::error_msg( 'Please, sign in to get access to this page' );
 			$this->f3->reroute( '/login' );
 		} else {
-
-			echo Controller::twig()->render( 'admin/index.twig' );
+			$context = array(
+				'username' => $this->f3->get( 'SESSION.user' )
+			);
+			echo Controller::twig()->render( 'admin/index.twig', $context );
 		}
 	}
 }

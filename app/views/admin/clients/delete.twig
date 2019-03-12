@@ -1,0 +1,35 @@
+{% extends "template.twig" %}
+{% block title %}{{ settings.site_name }} &mdash; Edit client{% endblock %}
+{% block body %}
+    <h1>Removing a client</h1>
+    {% include "messages.twig" %}
+    {% if clients %}
+        <table id="clientsTable" class="table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Company</th>
+                <th>Phone number</th>
+            </tr>
+            </thead>
+            {% for client in clients %}
+                <tr data-id="{{ client.id }}">
+                    <td>{{ client.id }}</td>
+                    <td class="editMe"
+                        data-target="name">{{ client.name }}</td>
+                    <td class="editMe"
+                        data-target="company"
+                        class="editMe">{{ client.company }}</td>
+                    <td class="editMe"
+                        data-target="phone">+{{ client.phone }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+    {% include "usernav.twig" %}
+{% endblock %}
+{% block js %}
+    {{ parent() }}
+    <script src="{{ UI }}js/deleteClient.js"></script>
+{% endblock %}

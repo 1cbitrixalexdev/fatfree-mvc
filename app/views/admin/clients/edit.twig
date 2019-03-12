@@ -27,7 +27,7 @@
             {% endfor %}
         </table>
     {% endif %}
-    <a href="/logout" class="btn btn-secondary">Log out</a>
+    {% include "usernav.twig" %}
 {% endblock %}
 {% block js %}
     {{ parent() }}

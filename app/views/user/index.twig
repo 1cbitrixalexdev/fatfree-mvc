@@ -4,6 +4,7 @@
     {% if is_logged %}
         {% include "messages.twig" %}
         <h1>User page</h1>
-        <a href="/logout">Log out</a>
+        <h2>{{ username }}</h2>
+        {% include "usernav.twig" %}
     {% endif %}
 {% endblock %}

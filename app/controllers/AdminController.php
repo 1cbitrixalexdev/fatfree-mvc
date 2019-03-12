@@ -44,7 +44,10 @@ class AdminController extends Controller {
 				}
 			}
 		}
-		echo Controller::twig()->render( 'admin/clients/add.twig' );
+		$context = array(
+			'username' => $this->f3->get( 'SESSION.user' )
+		);
+		echo Controller::twig()->render( 'admin/clients/add.twig', $context );
 		// TODO check if client already exist
 	}
 
@@ -61,16 +64,31 @@ class AdminController extends Controller {
 				self::error_msg( 'There were some troubles editing client' );
 			}
 		}
-		/*$list        = new Clients( $this->db );
-		$clients     = $list->all();
-		$clientsList = array();
-		foreach ( $clients as $client ) {
-			$clientsList[] = $client->cast();
-		}*/
 		$context = array(
-			'clients' => $this->getClients()
+			'clients'  => $this->getClients(),
+			'username' => $this->f3->get( 'SESSION.user' )
 		);
 		echo Controller::twig()->render( 'admin/clients/edit.twig', $context );
+	}
+
+	function deleteClient( $f3 ) {
+		$client   = $f3->get( 'POST' );
+		$clientId = $f3->get( 'PARAMS.client' );
+		if ( $client && $clientId ) {
+			$_POST = $f3->clean( $_POST );
+			try {
+				$editClient = new Clients( $this->db );
+				$editClient->delete( $clientId );
+			} catch ( Exception $e ) {
+				echo 'Throw exception: ', $e->getMessage(), "\n";
+				self::error_msg( 'There were some troubles deleting client' );
+			}
+		}
+		$context = array(
+			'clients'  => $this->getClients(),
+			'username' => $this->f3->get( 'SESSION.user' )
+		);
+		echo Controller::twig()->render( 'admin/clients/delete.twig', $context );
 	}
 
 	public function getClients() {

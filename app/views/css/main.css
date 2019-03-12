@@ -22,6 +22,11 @@ td.editMe.fail {
     animation: redPulse 2s;
 }
 
+#userNav img {
+    height: auto;
+    width: 64px;
+}
+
 @keyframes greenPulse {
     0% {
         background-color: transparent;
