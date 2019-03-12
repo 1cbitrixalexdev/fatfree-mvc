@@ -27,6 +27,15 @@ td.editMe.fail {
     width: 64px;
 }
 
+#clientsTable .remove {
+    color: #c00;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1.75rem;
+    line-height: 1;
+    margin: 0;
+}
+
 @keyframes greenPulse {
     0% {
         background-color: transparent;

@@ -79,6 +79,7 @@ class AdminController extends Controller {
 			try {
 				$editClient = new Clients( $this->db );
 				$editClient->delete( $clientId );
+				self::success_msg( 'Client was successfully removed!' );
 			} catch ( Exception $e ) {
 				echo 'Throw exception: ', $e->getMessage(), "\n";
 				self::error_msg( 'There were some troubles deleting client' );
