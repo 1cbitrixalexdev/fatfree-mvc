@@ -43,9 +43,9 @@ class UserController extends Controller {
 				}
 
 				if ( password_verify( $password, $user->password ) ) {
-					$userPage = '/user/';
+					$userPage  = '/user/';
 					$adminPage = '/admin/';
-					$reRoute = '/';
+					$reRoute   = '/';
 
 					if ( $user->role ) {
 						if ( $user->role == 1 ) {
@@ -77,10 +77,7 @@ class UserController extends Controller {
 
 	function userPage() {
 		$this->f3->clear( 'SESSION.messages' );
-		if ( ! ( $this->f3->get( 'SESSION.user' ) ) && ! ( in_array( $this->f3->get( "SESSION.role" ), array(
-				1,
-				2
-			) ) ) ) {
+		if ( ! $this->isLogged( $this->f3 ) ) {
 			self::error_msg( 'Please, sign in to get access to this page' );
 			$this->f3->reroute( '/login' );
 		} else {
@@ -91,16 +88,11 @@ class UserController extends Controller {
 		}
 	}
 
-	function adminPage() {
-		$this->f3->clear( 'SESSION.messages' );
-		if ( ! ( $this->f3->get( 'SESSION.user' ) ) && $this->f3->get( "SESSION.role" ) != 1 ) {
-			self::error_msg( 'Please, sign in to get access to this page' );
-			$this->f3->reroute( '/login' );
-		} else {
-			$context = array(
-				'username' => $this->f3->get( 'SESSION.user' )
-			);
-			echo Controller::twig()->render( 'admin/index.twig', $context );
-		}
+	public static function isLogged( $f3 ) {
+		return ( $f3->get( 'SESSION.user' ) ) ? true : false;
+	}
+
+	public static function getRole( $f3 ) {
+		return ( $f3->get( 'SESSION.role' ) ) ? $f3->get( 'SESSION.role' ) : null;
 	}
 }

@@ -7,6 +7,20 @@
  */
 
 class AdminController extends Controller {
+
+	function adminPage() {
+		$this->f3->clear( 'SESSION.messages' );
+		if ( ! UserController::isLogged( $this->f3 ) && UserController::getRole( $this->f3 ) != 1 ) {
+			self::error_msg( 'Please, sign in to get access to this page' );
+			$this->f3->reroute( '/login' );
+		} else {
+			$context = array(
+				'username' => $this->f3->get( 'SESSION.user' )
+			);
+			echo Controller::twig()->render( 'admin/index.twig', $context );
+		}
+	}
+
 	function addClient( $f3 ) {
 		// clear previous error messages
 		$f3->clear( 'SESSION.messages' );
@@ -52,16 +66,18 @@ class AdminController extends Controller {
 	}
 
 	function editClient( $f3 ) {
-		$client   = $f3->get( 'POST' );
-		$clientId = $f3->get( 'PARAMS.client' );
-		if ( $client && $clientId ) {
-			$_POST = $f3->clean( $_POST );
-			try {
-				$editClient = new Clients( $this->db );
-				$editClient->edit( $clientId );
-			} catch ( Exception $e ) {
-				echo 'Throw exception: ', $e->getMessage(), "\n";
-				self::error_msg( 'There were some troubles editing client' );
+		if ( $f3->get( 'SESSION.is_logged' ) ) {
+			$client   = $f3->get( 'POST' );
+			$clientId = $f3->get( 'PARAMS.client' );
+			if ( $client && $clientId ) {
+				$_POST = $f3->clean( $_POST );
+				try {
+					$editClient = new Clients( $this->db );
+					$editClient->edit( $clientId );
+				} catch ( Exception $e ) {
+					echo 'Throw exception: ', $e->getMessage(), "\n";
+					self::error_msg( 'There were some troubles editing client' );
+				}
 			}
 		}
 		$context = array(
@@ -72,17 +88,19 @@ class AdminController extends Controller {
 	}
 
 	function deleteClient( $f3 ) {
-		$client   = $f3->get( 'POST' );
-		$clientId = $f3->get( 'PARAMS.client' );
-		if ( $client && $clientId ) {
-			$_POST = $f3->clean( $_POST );
-			try {
-				$editClient = new Clients( $this->db );
-				$editClient->delete( $clientId );
-				self::success_msg( 'Client was successfully removed!' );
-			} catch ( Exception $e ) {
-				echo 'Throw exception: ', $e->getMessage(), "\n";
-				self::error_msg( 'There were some troubles deleting client' );
+		if ( $f3->get( 'SESSION.is_logged' ) ) {
+			$client   = $f3->get( 'POST' );
+			$clientId = $f3->get( 'PARAMS.client' );
+			if ( $client && $clientId ) {
+				$_POST = $f3->clean( $_POST );
+				try {
+					$editClient = new Clients( $this->db );
+					$editClient->delete( $clientId );
+					self::success_msg( 'Client was successfully removed!' );
+				} catch ( \PDOException $e ) {
+					$err = $e->errorInfo;
+					self::error_msg( 'There were some troubles deleting client: ' . $err[2] );
+				}
 			}
 		}
 		$context = array(

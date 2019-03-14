@@ -36,5 +36,20 @@
             {% endfor %}
         </table>
     {% endif %}
+    <div class="form-group">
+        <textarea name="comment" id="comment" class="form-control"></textarea>
+    </div>
     {% include "usernav.twig" %}
+{% endblock %}
+{% block js %}
+    {{ parent() }}
+    <script>
+        CKEDITOR.replace('comment');
+        CKEDITOR.editorConfig = function (config) {
+            config.language = 'es';
+            config.uiColor = '#F7B42C';
+            config.height = 300;
+            config.toolbarCanCollapse = true;
+        };
+    </script>
 {% endblock %}
