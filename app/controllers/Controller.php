@@ -68,6 +68,7 @@ class Controller
 			$twig->addGlobal('UI', "/" . $f3->get('UI'));
 			$twig->addGlobal('settings', $f3->get('settings'));
 			$twig->addGlobal( 'is_logged', $f3->get( 'SESSION.is_logged' ) );
+			$twig->addGlobal( 'role', $f3->get( 'SESSION.role' ) );
 		}
 		return $twig;
 	}

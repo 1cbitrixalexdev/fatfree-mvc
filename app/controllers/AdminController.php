@@ -24,49 +24,54 @@ class AdminController extends Controller {
 	function addClient( $f3 ) {
 		// clear previous error messages
 		$f3->clear( 'SESSION.messages' );
-		$client = $f3->get( 'POST' );
-		if ( $client ) {
-			while ( true ) {
-				$_POST = $f3->clean( $_POST );
-				// check if this client is already exists
-				$searchClient = $this->db->exec(
+		if ( UserController::isLogged( $f3 ) && UserController::getRole( $f3 ) >= 1 ) {
+			$client = $f3->get( 'POST' );
+			if ( $client ) {
+				while ( true ) {
+					$_POST = $f3->clean( $_POST );
+					// check if this client is already exists
+					$searchClient = $this->db->exec(
 
-					'SELECT id FROM clients ' .
-					'WHERE name = :name ' .
-					'AND company = :company ' .
-					'AND phone = :phone'
-					,
-					array(
-						':name'    => $_POST["name"],
-						':company' => $_POST["company"],
-						':phone'   => $_POST["phone"]
-					)
-				);
-				if ( count( $searchClient ) ) {
-					self::error_msg( 'This client already exists!', 'duplicate' );
-					break;
-				}
-				try {
-					$newClient = new Clients( $this->db );
-					$newClient->add();
-					self::success_msg( 'Client added successfully!' );
-					break;
-				} catch ( Exception $e ) {
-					echo 'Throw exception: ', $e->getMessage(), "\n";
-					self::error_msg( 'There were some troubles adding client' );
-					break;
+						'SELECT id FROM clients ' .
+						'WHERE name = :name ' .
+						'AND company = :company ' .
+						'AND phone = :phone'
+						,
+						array(
+							':name'    => $_POST["name"],
+							':company' => $_POST["company"],
+							':phone'   => $_POST["phone"]
+						)
+					);
+					if ( count( $searchClient ) ) {
+						self::error_msg( 'This client already exists!', 'duplicate' );
+						break;
+					}
+					try {
+						$newClient = new Clients( $this->db );
+						$newClient->add();
+						self::success_msg( 'Client added successfully!' );
+						break;
+					} catch ( Exception $e ) {
+						echo 'Throw exception: ', $e->getMessage(), "\n";
+						self::error_msg( 'There were some troubles adding client' );
+						break;
+					}
 				}
 			}
+		} else {
+			self::error_msg( 'Only moderators can add clients' );
+			$f3->reroute( '/' );
 		}
 		$context = array(
 			'username' => $this->f3->get( 'SESSION.user' )
 		);
 		echo Controller::twig()->render( 'admin/clients/add.twig', $context );
-		// TODO check if client already exist
 	}
 
 	function editClient( $f3 ) {
-		if ( $f3->get( 'SESSION.is_logged' ) ) {
+		$f3->clear( 'SESSION.messages' );
+		if ( UserController::isLogged( $f3 ) && UserController::getRole( $f3 ) == 1 ) {
 			$client   = $f3->get( 'POST' );
 			$clientId = $f3->get( 'PARAMS.client' );
 			if ( $client && $clientId ) {
@@ -79,6 +84,9 @@ class AdminController extends Controller {
 					self::error_msg( 'There were some troubles editing client' );
 				}
 			}
+		} else {
+			self::error_msg( 'Only administrators can edit clients' );
+			$f3->reroute( '/' );
 		}
 		$context = array(
 			'clients'  => $this->getClients(),
@@ -88,7 +96,8 @@ class AdminController extends Controller {
 	}
 
 	function deleteClient( $f3 ) {
-		if ( $f3->get( 'SESSION.is_logged' ) ) {
+		$f3->clear( 'SESSION.messages' );
+		if ( UserController::isLogged( $f3 ) && UserController::getRole( $f3 ) == 1 ) {
 			$client   = $f3->get( 'POST' );
 			$clientId = $f3->get( 'PARAMS.client' );
 			if ( $client && $clientId ) {
@@ -102,6 +111,9 @@ class AdminController extends Controller {
 					self::error_msg( 'There were some troubles deleting client: ' . $err[2] );
 				}
 			}
+		} else {
+			self::error_msg( 'Only administrators can delete clients' );
+			$f3->reroute( '/' );
 		}
 		$context = array(
 			'clients'  => $this->getClients(),

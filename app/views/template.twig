@@ -16,12 +16,21 @@
           href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
     <link rel="stylesheet" href="{{ UI }}css/main.css" media="all">
 </head>
-<body{% block body_attr %} id="{{ "PATH"|f3|trim('/') }}Page"{% endblock %}>
-<div class="wrapper">
+{% set path_array = "PATH"|f3|split('/') %}
+{% set body_id = '' %}
+{% for key in path_array %}
+    {% if loop.index > 2 %}
+        {% set body_id = ( body_id ~ key|capitalize ) %}
+    {% else %}
+        {% set body_id = ( body_id ~ key) %}
+    {% endif %}
+{% endfor %}
+<body{% block body_attr %} id="{{ body_id }}Page"{% endblock %}>
+<div class="wrapper" data-splitted="{{ path_array.3 }}">
     {% if is_logged %}
         {% include "menu.twig" %}
     {% endif %}
-    <main id="content">
+    <main id="content"{% if is_logged == false %} class="active"{% endif %}>
         {% if is_logged %}
             <div id="sidebarCollapse" class="">
                 <i class="fas fa-align-left"></i>

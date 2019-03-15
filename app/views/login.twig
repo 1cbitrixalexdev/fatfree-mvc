@@ -1,35 +1,36 @@
 {% extends "template.twig" %}
 {% block title %}{{ settings.site_name }} &mdash; Sign in{% endblock %}
 {% block body %}
-    <div class="row h-100 align-items-center">
-        <div class="col-md-6 col-lg-4 offset-md-3 offset-lg-4">
-            <div class="card">
-                <div class="card-body">
-                    {% include "messages.twig" %}
-                    <form class="form-signin" method="POST" action="/authenticate">
-                        <h2 class="form-signin-heading">Please sign in</h2>
-                        <div class="form-group">
-                            <label for="inputUsername" class="sr-only">Username</label>
-                            <input type="text"
-                                   id="inputUsername"
-                                   name="username"
-                                   class="form-control"
-                                   placeholder="Username"
-                                   required="">
-                        </div>
-                        <div class="form-group">
-                            <label for="inputPassword" class="sr-only">Password</label>
-                            <input type="password"
-                                   id="inputPassword"
-                                   name="password"
-                                   class="form-control"
-                                   placeholder="Password"
-                                   required="">
-                        </div>
-                        <button class="btn btn-primary" type="submit">Sign in</button>
-                    </form>
+    <div class="container">
+        <div class="row h-100 align-items-center">
+            <div class="col-md-6 col-lg-4 offset-md-3 offset-lg-4">
+                <div class="card">
+                    <div class="card-body">
+                        {% include "messages.twig" %}
+                        <form class="form-signin" method="POST" action="/authenticate">
+                            <h2 class="form-signin-heading">Please sign in</h2>
+                            <div class="form-group">
+                                <label for="inputUsername" class="sr-only">Username</label>
+                                <input type="text"
+                                       id="inputUsername"
+                                       name="username"
+                                       class="form-control"
+                                       placeholder="Username"
+                                       required="">
+                            </div>
+                            <div class="form-group">
+                                <label for="inputPassword" class="sr-only">Password</label>
+                                <input type="password"
+                                       id="inputPassword"
+                                       name="password"
+                                       class="form-control"
+                                       placeholder="Password"
+                                       required="">
+                            </div>
+                            <button class="btn btn-primary" type="submit">Sign in</button>
+                        </form>
+                    </div>
                 </div>
-
             </div>
         </div>
     </div>

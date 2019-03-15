@@ -1,45 +1,53 @@
 <nav id="sidebar">
     <div class="sidebar-header">
-        <h3 class="text-center">Admin menu</h3>
+        <h3 class="text-center">Tools</h3>
     </div>
 
     <ul class="list-unstyled components">
-        <div class="text-center"><img src="{{ UI }}images/{{ username }}_thumb.jpg" class="rounded-circle mr-2" alt="">
+        <div class="text-center">
+            <img src="{{ UI }}images/{{ username }}_thumb.jpg"
+                 class="rounded-circle mr-2"
+                 alt=""/>
+            <p>{{ username }} [{{ role }}]</p>
         </div>
-        <li class="active">
+        <li{% if "PATH"|f3 == '/' %} class="active"{% endif %}>
             <a href="/"><span class="fas fa-home"></span> Home</a>
         </li>
-        <li>
+        <li{% if 'orders' in "PATH"|f3 %} class="active"{% endif %}>
             <a href="#ordersSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><span
                         class="fas fa-table"></span> Orders</a>
             <ul class="collapse list-unstyled" id="ordersSubmenu">
                 <li>
                     <a href="/admin/orders/add">Add order</a>
                 </li>
-                <li>
-                    <a href="/admin/orders/edit">Edit order</a>
-                </li>
-                <li>
-                    <a href="/admin/orders/delete">Delete order</a>
-                </li>
+                {% if role == 1 %}
+                    <li>
+                        <a href="/admin/orders/edit">Edit order</a>
+                    </li>
+                    <li>
+                        <a href="/admin/orders/delete">Delete order</a>
+                    </li>
+                {% endif %}
             </ul>
         </li>
-        <li>
+        <li{% if 'clients' in "PATH"|f3 %} class="active"{% endif %}>
             <a href="#clientsSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><span
                         class="fas fa-users"></span> Clients</a>
             <ul class="collapse list-unstyled" id="clientsSubmenu">
                 <li>
-                    <a href="/admin/clients/add"><span></span> Add client</a>
+                    <a href="/admin/clients/add">Add client</a>
                 </li>
-                <li>
-                    <a href="/admin/clients/edit">Edit client</a>
-                </li>
-                <li>
-                    <a href="/admin/clients/delete">Delete client</a>
-                </li>
+                {% if role == 1 %}
+                    <li>
+                        <a href="/admin/clients/edit">Edit client</a>
+                    </li>
+                    <li>
+                        <a href="/admin/clients/delete">Delete client</a>
+                    </li>
+                {% endif %}
             </ul>
         </li>
-        <li>
+        <li{% if 'user' in "PATH"|f3 %} class="active"{% endif %}>
             <a href="/user"><span class="fas fa-address-card"></span> Profile</a>
         </li>
         <div class="dropdown-divider"></div>
