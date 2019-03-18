@@ -1,0 +1,19 @@
+{% set previous = (position > 1) ? position-1 : '' %}
+{% set next = (position != count) ? position : '' %}
+<nav aria-label="Pagination">
+    <ul class="pagination">
+        <li class="page-item{% if previous == '' %} disabled{% endif %}">
+            <a class="page-link" href="{{ url }}/{{ (previous == 1) ? '' : previous }}" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        {% for page in 1..count %}
+            <li class="page-item"><a class="page-link" href="{{ url }}/{{ page }}">{{ page }}</a></li>
+        {% endfor %}
+        <li class="page-item{% if next == '' %} disabled{% endif %}">
+            <a class="page-link" href="{{ url }}/{{ next }}" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+    </ul>
+</nav>

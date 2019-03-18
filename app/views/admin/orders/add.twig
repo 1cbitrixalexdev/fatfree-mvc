@@ -1,0 +1,72 @@
+{% extends "template.twig" %}
+{% block title %}{{ settings.site_name }} &mdash; Add order{% endblock %}
+{% block body %}
+    <h1>Adding an order</h1>
+    {% include "messages.twig" %}
+    <form action="/admin/orders/add" method="post">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="orderTitle">Title<span class="required">*</span></label>
+                    <input type="text"
+                           class="form-control"
+                           name="title"
+                           id="orderTitle"
+                           required
+                    />
+                </div>
+                <div class="form-group">
+                    <label for="orderDescription"></label>
+                    <textarea name="description"
+                              id="orderDescription"
+                              class="form-control"
+                              rows="10"></textarea>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="orderClient">Client<span class="required">*</span></label>
+                    <select name="client" id="orderClient" class="form-control" required>
+                        {% for client in clients %}
+                            <option value="{{ client.id }}">{{ client.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="orderStart">Date to start</label>
+                    <input type="date"
+                           class="form-control"
+                           name="start"
+                           id="orderStart"/>
+                </div>
+                <div class="form-group">
+                    <label for="orderPrice">Price</label>
+                    <input type="number"
+                           min="1"
+                           max="999999999"
+                           class="form-control"
+                           name="price"
+                           id="orderPrice"
+                           required/>
+                </div>
+                <div class="form-group">
+                    <input type="hidden" name="status" value="0"/>
+                    <button class="btn btn-success" type="submit">Add order</button>
+                </div>
+            </div>
+        </div>
+    </form>
+    {% include "usernav.twig" %}
+{% endblock %}
+{% block js %}
+    {{ parent() }}
+    <script>
+        CKEDITOR.replace('orderDescription');
+        CKEDITOR.editorConfig = function (config) {
+            config.language = 'es';
+            config.uiColor = '#F7B42C';
+            config.height = 300;
+            config.toolbarCanCollapse = true;
+        };
+    </script>
+{% endblock %}

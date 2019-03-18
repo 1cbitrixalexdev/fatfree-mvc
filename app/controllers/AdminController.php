@@ -69,8 +69,51 @@ class AdminController extends Controller {
 		echo Controller::twig()->render( 'admin/clients/add.twig', $context );
 	}
 
+	function addOrder( $f3 ) {
+		$f3->clear( 'SESSION.messages' );
+		if ( UserController::isLogged( $f3 ) && UserController::getRole( $f3 ) >= 1 ) {
+			$post = $f3->get( 'POST' );
+			if ( $post ) {
+				while ( true ) {
+					$_POST['title'] = $f3->clean( $_POST['title'] );
+					// check if this client is already exists
+					$searchOrder = $this->db->exec(
+						'SELECT id FROM orders ' .
+						'WHERE title = :title;',
+						array(
+							':title' => $_POST["title"]
+						)
+					);
+					if ( count( $searchOrder ) ) {
+						self::error_msg( 'This order already exists!', 'duplicate' );
+						break;
+					}
+					try {
+						$newOrder = new Orders( $this->db );
+						$newOrder->add();
+						self::success_msg( 'Order added successfully!' );
+						break;
+					} catch ( Exception $e ) {
+						echo 'Throw exception: ', $e->getMessage(), "\n";
+						self::error_msg( 'There were some troubles adding order' );
+						break;
+					}
+				}
+			}
+		} else {
+			self::error_msg( 'Only moderators can add orders' );
+			$f3->reroute( '/' );
+		}
+		$context = array(
+			'username' => $this->f3->get( 'SESSION.user' ),
+			'clients'  => $this->getClients()
+		);
+		echo Controller::twig()->render( 'admin/orders/add.twig', $context );
+	}
+
 	function editClient( $f3 ) {
 		$f3->clear( 'SESSION.messages' );
+		$page = ( $f3->get( 'PARAMS.page' ) ) ? $f3->get( 'PARAMS.page' ) + 1 : 1;
 		if ( UserController::isLogged( $f3 ) && UserController::getRole( $f3 ) == 1 ) {
 			$client   = $f3->get( 'POST' );
 			$clientId = $f3->get( 'PARAMS.client' );
@@ -88,9 +131,17 @@ class AdminController extends Controller {
 			self::error_msg( 'Only administrators can edit clients' );
 			$f3->reroute( '/' );
 		}
+		$listed  = new Clients( $this->db );
+		$clients = $listed->paginate( $page - 1, 5 );
 		$context = array(
-			'clients'  => $this->getClients(),
-			'username' => $this->f3->get( 'SESSION.user' )
+			'clients'    => $clients['subset'],
+			'username'   => $this->f3->get( 'SESSION.user' ),
+			'pagination' => array(
+				'total'  => $clients['total'],
+				'count'  => $clients['count'],
+				'pos'    => $clients['pos'],
+				'params' => $f3->get( 'PARAMS.page' )
+			)
 		);
 		echo Controller::twig()->render( 'admin/clients/edit.twig', $context );
 	}
@@ -132,4 +183,5 @@ class AdminController extends Controller {
 
 		return $clientsList;
 	}
+
 }

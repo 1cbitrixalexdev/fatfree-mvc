@@ -3,54 +3,96 @@
 {% block body %}
     <h1>Clients and orders</h1>
     {% include "messages.twig" %}
-    {% if list %}
-        <table class="table">
-            <thead>
-            <tr>
-                <th>Client</th>
-                <th>Title</th>
-                {% if is_logged %}
-                    <th>Description</th>
-                    {% if role >= 1 %}
-                        <th>Start</th>
-                    {% endif %}
-                    {% if role == 1 %}
-                        <th>Price</th>
-                    {% endif %}
-                {% endif %}
-            </tr>
-            </thead>
-            {% for item in list %}
+    {% if orders_list %}
+        <h2>Orders</h2>
+        <div class="responsive">
+            <table id="ordersList" class="table">
+                <thead>
                 <tr>
-                    <td data-client-id="{{ item.client }}">{{ item.client_name }}</td>
-                    <td>{{ item.title }}</td>
+                    {% if role == 1 %}
+                        <th>Id</th>
+                    {% endif %}
+                    <th>Client</th>
+                    <th>Title</th>
                     {% if is_logged %}
-                        <td>{{ item.description }}</td>
+                        <th>Description</th>
                         {% if role >= 1 %}
-                            <td>{{ item.start }}</td>
+                            <th>Start</th>
                         {% endif %}
                         {% if role == 1 %}
-                            <td>{{ item.price }}</td>
+                            <th>Price</th>
                         {% endif %}
                     {% endif %}
                 </tr>
-            {% endfor %}
-        </table>
+                </thead>
+                <tbody>
+                {% for item in orders_list %}
+                    <tr>
+                        {% if role == 1 %}
+                            <td>{{ item.id }}</td>
+                        {% endif %}
+                        <td data-client-id="{{ item.client }}">{{ item.client_name }}</td>
+                        <td>{{ item.title|raw }}</td>
+                        {% if is_logged %}
+                            <td>{{ item.description|raw }}</td>
+                            {% if role >= 1 %}
+                                <td>{{ item.start }}</td>
+                            {% endif %}
+                            {% if role == 1 %}
+                                <td>{{ item.price }}</td>
+                            {% endif %}
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="100%" style="text-align:right">Received <b>{{ sum_orders }}</b></td>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
     {% endif %}
-    <div class="form-group">
+    {% if clients_list %}
+        <h2>Clients</h2>
+        <div class="responsive">
+            <table id="clientsList" class="table">
+                <thead>
+                <tr>
+                    {% if role == 1 %}
+                        <th>Id</th>
+                    {% endif %}
+                    <th>Name</th>
+                    <th>Company</th>
+                    {% if role >= 1 %}
+                        <th>Phone</th>
+                    {% endif %}
+                </tr>
+                </thead>
+                <tbody>
+                {% for item in clients_list %}
+                    <tr>
+                        {% if role == 1 %}
+                            <td>{{ item.id }}</td>
+                        {% endif %}
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.company }}</td>
+                        {% if role == 1 %}
+                            <td>+{{ item.phone }}</td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="100%" style="text-align:right">Total: <b>{{ sum_clients }}</b></td>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+    {% endif %}
+    {#    <div class="form-group">
         <textarea name="comment" id="comment" class="form-control"></textarea>
-    </div>
+    </div> #}
     {% include "usernav.twig" %}
-{% endblock %}
-{% block js %}
-    {{ parent() }}
-    <script>
-        CKEDITOR.replace('comment');
-        CKEDITOR.editorConfig = function (config) {
-            config.language = 'es';
-            config.uiColor = '#F7B42C';
-            config.height = 300;
-            config.toolbarCanCollapse = true;
-        };
-    </script>
 {% endblock %}

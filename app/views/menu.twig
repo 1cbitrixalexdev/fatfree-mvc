@@ -8,11 +8,16 @@
             <img src="{{ UI }}images/{{ username }}_thumb.jpg"
                  class="rounded-circle mr-2"
                  alt=""/>
-            <p>{{ username }} [{{ role }}]</p>
+            <p>{{ username }}</p>
         </div>
         <li{% if "PATH"|f3 == '/' %} class="active"{% endif %}>
             <a href="/"><span class="fas fa-home"></span> Home</a>
         </li>
+        {% if role == 1 %}
+            <li{% if "PATH"|f3 == '/admin' %} class="active"{% endif %}>
+                <a href="/admin"><span class="fas fa-cog"></span> Dashboard</a>
+            </li>
+        {% endif %}
         <li{% if 'orders' in "PATH"|f3 %} class="active"{% endif %}>
             <a href="#ordersSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><span
                         class="fas fa-table"></span> Orders</a>

@@ -26,13 +26,16 @@
                 </tr>
             {% endfor %}
         </table>
+        <p>Page {{ pagination.pos + 1 }} of: {{ pagination.count }}</p>
+
+        {% include "pagination.twig" with {'url':'/admin/clients', 'position':pagination.pos + 1, 'count':pagination.count} %}
     {% endif %}
     {% include "usernav.twig" %}
 {% endblock %}
 {% block js %}
     {{ parent() }}
     {#<script src="{{ UI }}js/editClient.js"></script>#}
-    <script src="{{ UI }}js/SimpleTableCellEditor.js"></script>
+    <script src="{{ UI }}js/SimpleTableCellEditor.es6.min.js"></script>
     <script>
         const magicTable = new SimpleTableCellEditor("clientsTable");
         magicTable.SetEditableClass("editMe", {
