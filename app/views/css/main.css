@@ -124,10 +124,41 @@ a[data-toggle="collapse"] {
     background: rgba(255, 255, 255, 0.7);
 }
 
-.table {
-    background-color: #fff;
+.table,
+.page-link {
+    background-color: #fffeaf;
 }
 
+.pagination,
+.page-item:first-child .page-link,
+.page-item:last-child .page-link {
+    border-radius: 0;
+}
+
+.page-item.disabled .page-link {
+    background-color: #fffeaf;
+    border-color: #fffeaf;
+}
+
+.table td, .table th,
+.table thead th {
+    border-color: #e8ad50;
+}
+
+.page-link {
+    border-color: #fffeaf;
+}
+
+.page-item.active .page-link {
+    background: #6d7fcc;
+    border-color: #6d7fcc;
+}
+
+.page-link:hover {
+    color: #fff;
+    background: #5969b1;
+    border-color: #6d7fcc;
+}
 td.editable,
 td.editMe {
     cursor: pointer;

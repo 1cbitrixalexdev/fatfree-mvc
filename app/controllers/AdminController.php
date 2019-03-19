@@ -14,8 +14,36 @@ class AdminController extends Controller {
 			self::error_msg( 'Please, sign in to get access to this page' );
 			$this->f3->reroute( '/login' );
 		} else {
+			$orders = $this->db->exec( array(
+				'SELECT client, COUNT(id) FROM orders GROUP BY client LIMIT 0, 5'
+			) );
+			$sorted = array();
+			foreach ( $orders as $order ) {
+				$sorted[] = $order['client'];
+
+			}
+			//file_put_contents('orders.txt', print_r($sorted, true));
+			$list         = new Clients( $this->db );
+			$clients      = $list->select( 'name, id' );
+			$clientsArray = array();
+			$clientsList  = array();
+			$ordersList   = array();
+			foreach ( $clients as $client ) {
+				if ( in_array( $client->cast()['id'], $sorted ) ) {
+					$clientsArray[] = $client->cast();
+				}
+			}
+			//file_put_contents('clients.txt', print_r($clientsArray, true));
+			for ( $i = 0; $i < count( $orders ); $i ++ ) {
+				$clientsArray[ $i ]['count'] = $orders[ $i ]['COUNT(id)'];
+				array_push( $clientsList, $clientsArray[ $i ]['name'] );
+				array_push( $ordersList, $clientsArray[ $i ]['count'] );
+			}
+			file_put_contents( 'clients.txt', print_r( $clientsList, true ) );
 			$context = array(
-				'username' => $this->f3->get( 'SESSION.user' )
+				'username' => $this->f3->get( 'SESSION.user' ),
+				'clients'  => $clientsList,
+				'orders'   => $ordersList
 			);
 			echo Controller::twig()->render( 'admin/index.twig', $context );
 		}

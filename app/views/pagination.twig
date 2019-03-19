@@ -8,7 +8,18 @@
             </a>
         </li>
         {% for page in 1..count %}
-            <li class="page-item"><a class="page-link" href="{{ url }}/{{ page }}">{{ page }}</a></li>
+            {% if page == 1 %}
+                {% set page_link = '' %}
+            {% else %}
+                {% set page_link = page - 1 %}
+            {% endif %}
+            <li class="page-item{% if position == page %} active{% endif %}">
+                {% if position == page %}
+                    <span class="page-link">{{ page }}</span>
+                {% else %}
+                    <a class="page-link" href="{{ url }}/{{ page_link }}">{{ page }}</a>
+                {% endif %}
+            </li>
         {% endfor %}
         <li class="page-item{% if next == '' %} disabled{% endif %}">
             <a class="page-link" href="{{ url }}/{{ next }}" aria-label="Next">
