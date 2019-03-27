@@ -15,7 +15,7 @@ class AdminController extends Controller {
 			$this->f3->reroute( '/login' );
 		} else {
 			$orders = $this->db->exec( array(
-				'SELECT client, COUNT(id) FROM orders GROUP BY client LIMIT 0, 5'
+				'SELECT client, COUNT(id), price FROM orders GROUP BY client LIMIT 0, 5'
 			) );
 			$sorted = array();
 			foreach ( $orders as $order ) {
@@ -28,6 +28,7 @@ class AdminController extends Controller {
 			$clientsArray = array();
 			$clientsList  = array();
 			$ordersList   = array();
+			$incomeList   = array();
 			foreach ( $clients as $client ) {
 				if ( in_array( $client->cast()['id'], $sorted ) ) {
 					$clientsArray[] = $client->cast();
@@ -38,12 +39,14 @@ class AdminController extends Controller {
 				$clientsArray[ $i ]['count'] = $orders[ $i ]['COUNT(id)'];
 				array_push( $clientsList, $clientsArray[ $i ]['name'] );
 				array_push( $ordersList, $clientsArray[ $i ]['count'] );
+				array_push( $incomeList, $orders[ $i ]['price'] );
 			}
-			file_put_contents( 'clients.txt', print_r( $clientsList, true ) );
+			//file_put_contents( 'clients.txt', print_r( $clientsList, true ) );
 			$context = array(
 				'username' => $this->f3->get( 'SESSION.user' ),
 				'clients'  => $clientsList,
-				'orders'   => $ordersList
+				'orders'   => $ordersList,
+				'money'    => $incomeList,
 			);
 			echo Controller::twig()->render( 'admin/index.twig', $context );
 		}
